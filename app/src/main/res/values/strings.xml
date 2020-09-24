@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Assignment</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="me">Me</string>
+    <string name="name">Name</string>
+    <string name="mobile">Mobile</string>
+    <string name="email">Email</string>
+    <string name="save">Save</string>
+    <string name="clear">Clear</string>
+    <string name="data_saved">Data Saved Successfully</string>
+    <string name="next">Next</string>
+</resources>

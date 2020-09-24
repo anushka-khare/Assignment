@@ -1,0 +1,24 @@
+<resources>
+    <!--
+    TODO: Before you run your application, you need a Google Maps API key.
+
+    To get one, follow this link, follow the directions and press "Create" at the end:
+
+    https://console.developers.google.com/flows/enableapi?apiid=maps_android_backend&keyType=CLIENT_SIDE_ANDROID&r=6D:CE:55:07:39:EA:31:05:DE:D6:BD:75:C5:00:47:4F:72:A4:F5:18%3Bcom.daffodil.assignment
+
+    You can also add your credentials to an existing key, using these values:
+
+    Package name:
+    com.daffodil.assignment
+
+    SHA-1 certificate fingerprint:
+    6D:CE:55:07:39:EA:31:05:DE:D6:BD:75:C5:00:47:4F:72:A4:F5:18
+
+    Alternatively, follow the directions here:
+    https://developers.google.com/maps/documentation/android/start#get-key
+
+    Once you have your key (it starts with "AIza"), replace the "google_maps_key"
+    string in this file.
+    -->
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyDRLi9-rli2GZf1EsSidF5N0hz9_9_RrIs</string>
+</resources>
