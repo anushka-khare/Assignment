@@ -87,4 +87,13 @@
         android:inputType="textEmailAddress"
         android:textColorLink="@color/colorAccent" />
 
+    <Button
+        android:id="@+id/next_btn"
+        android:text="@string/next"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:background="@color/textBlack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
 </LinearLayout>

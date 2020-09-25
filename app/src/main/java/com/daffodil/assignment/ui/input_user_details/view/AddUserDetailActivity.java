@@ -1,8 +1,10 @@
 package com.daffodil.assignment.ui.input_user_details.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -16,6 +18,7 @@ import androidx.lifecycle.ViewModelProviders;
 import com.daffodil.assignment.R;
 import com.daffodil.assignment.ui.input_user_details.model.UserDetail;
 import com.daffodil.assignment.ui.input_user_details.view_model.UserDetailViewModel;
+import com.daffodil.assignment.ui.upload_docs.view.UploadDocActivity;
 
 public class AddUserDetailActivity extends AppCompatActivity {
 
@@ -28,6 +31,7 @@ public class AddUserDetailActivity extends AppCompatActivity {
     private AppCompatButton saveBtn, clearBtn;
     private UserDetailViewModel userDetailViewModel;
     private Long recentlySavedRow ;
+    private Button next_btn;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,6 +53,7 @@ public class AddUserDetailActivity extends AppCompatActivity {
         userNameTv = findViewById(R.id.user_name_tv);
         mobileTv = findViewById(R.id.mobile_tv);
         emailTv = findViewById(R.id.email_tv);
+        next_btn =  findViewById(R.id.next_btn);
 
         saveBtn.setOnClickListener(v -> {
             userDetailViewModel.saveDataInDB(userNameEdt, mobileEdt, emailEdt);
@@ -56,6 +61,14 @@ public class AddUserDetailActivity extends AppCompatActivity {
 
         clearBtn.setOnClickListener(v -> {
             clearEdt();
+        });
+
+        next_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AddUserDetailActivity.this, UploadDocActivity.class);
+                startActivity(intent);
+            }
         });
 
     }

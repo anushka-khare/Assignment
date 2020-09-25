@@ -8,6 +8,8 @@ import androidx.fragment.app.FragmentActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -38,13 +40,15 @@ import com.google.android.libraries.places.api.model.PlaceLikelihood;
 import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest;
 import com.google.android.libraries.places.api.net.PlacesClient;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static com.daffodil.assignment.common.AppConstants.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, LocationListener, GoogleMap.OnPoiClickListener {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, LocationListener, GoogleMap.OnPoiClickListener, GoogleMap.OnMapClickListener {
 
     private static final String TAG = "MapsActivity";
     private static final long MIN_TIME = 400;
@@ -109,8 +113,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         // Call findCurrentPlace and handle the response (first check that the user has granted permission).
         if (ContextCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
 
-            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME, MIN_DISTANCE, this); //You can also use LocationManager.GPS_PROVIDER and LocationManager.PASSIVE_PROVIDER
-
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME, MIN_DISTANCE, this); //You can also use LocationManager.GPS_PROVIDER and LocationManager.PASSIVE_PROVIDER
+            mMap.setOnPoiClickListener(this);
+            mMap.setOnMapClickListener(this);
+            mMap.setMyLocationEnabled(true);
+            mMap.getUiSettings().setMyLocationButtonEnabled(true);
            /* placesClient.findCurrentPlace(request).addOnSuccessListener(((response) -> {
                 for (PlaceLikelihood placeLikelihood : response.getPlaceLikelihoods()) {
                     Log.i(TAG, String.format("Place '%s' has likelihood: %f",
@@ -133,14 +140,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             // See https://developer.android.com/training/permissions/requesting
             getLocationPermission();
         }
-        mMap.setOnPoiClickListener(this);
-        mMap.setMyLocationEnabled(true);
-        // Create a LatLngBounds that includes Australia.
-        LatLngBounds INDIA = new LatLngBounds(new LatLng(23.63936, 68.14712),
-                new LatLng(28.20453, 97.34466));
 
-        // Set the camera to the greatest possible zoom level that includes the bounds
-        mMap.setLatLngBoundsForCameraTarget(INDIA);
+        // Create a LatLngBounds that includes Australia.
+//        LatLngBounds INDIA = new LatLngBounds(new LatLng(23.63936, 68.14712),
+//                new LatLng(28.20453, 97.34466));
+//
+//        // Set the camera to the greatest possible zoom level that includes the bounds
+//        mMap.setLatLngBoundsForCameraTarget(INDIA);
+//        mMap.setMaxZoomPreference(14);
         mMap.setOnMyLocationClickListener(new GoogleMap.OnMyLocationClickListener() {
             @Override
             public void onMyLocationClick(@NonNull Location location) {
@@ -238,10 +245,54 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 pickUpMarker.remove();
             }
             pickUpMarker = mMap.addMarker(new MarkerOptions().position(currentLatLng)
-                    .title(getString(R.string.me))
-                    .snippet(pointOfInterest.name)
+                    .title(pointOfInterest.name)
+                    .snippet(getString(R.string.me))
                     .draggable(true));
             mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLatLng));
         }
+    }
+
+    @Override
+    public void onMapClick(LatLng latLng) {
+        if(mMap != null) {
+            currentLatLng = latLng;
+            if (pickUpMarker != null) {
+                pickUpMarker.remove();
+            }
+            String address = getAddress(latLng.latitude, latLng.longitude);
+            pickUpMarker = mMap.addMarker(new MarkerOptions().position(currentLatLng)
+                    .title(address)
+                    .snippet(getString(R.string.me))
+                    .draggable(true));
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLatLng));
+        }
+    }
+
+    public String getAddress(double lat, double lng) {
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        try {
+            List<Address> addresses = geocoder.getFromLocation(lat, lng, 1);
+            Address obj = addresses.get(0);
+            String add = obj.getAddressLine(0);
+            add = add + "\n" + obj.getCountryName();
+            add = add + "\n" + obj.getCountryCode();
+            add = add + "\n" + obj.getAdminArea();
+            add = add + "\n" + obj.getPostalCode();
+            add = add + "\n" + obj.getSubAdminArea();
+            add = add + "\n" + obj.getLocality();
+            add = add + "\n" + obj.getSubThoroughfare();
+
+           return add;
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+        return null;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
     }
 }

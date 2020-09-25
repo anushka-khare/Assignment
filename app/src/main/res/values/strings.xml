@@ -9,4 +9,15 @@
     <string name="clear">Clear</string>
     <string name="data_saved">Data Saved Successfully</string>
     <string name="next">Next</string>
+    <string name="file_size_msg">File size is too large[Max size: 20 MB]</string>
+    <string name="empty_file_msg">File is empty</string>
+    <string name="loading">Loading</string>
+    <string name="wait">Please wait...</string>
+    <string name="upload">Upload</string>
+    <string name="cancel">Cancel</string>
+    <string name="choose_a_file">Choose A file</string>
+    <string name="take_photo">Take Photo</string>
+    <string name="select_a_file">Select A File</string>
+    <string name="uploaded_successfully">Uploaded Successfully</string>
+    <string name="upload_document">Upload Document</string>
 </resources>
