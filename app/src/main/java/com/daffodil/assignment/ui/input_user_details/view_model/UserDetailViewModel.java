@@ -6,7 +6,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatEditText;
-import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
 import com.daffodil.assignment.base.BaseViewModelImp;
@@ -14,6 +13,7 @@ import com.daffodil.assignment.base.ErrorResponse;
 import com.daffodil.assignment.ui.input_user_details.model.UserDetail;
 import com.daffodil.assignment.ui.input_user_details.repo.SaveDataRepo;
 import com.daffodil.assignment.ui.input_user_details.repo.UserDataHelper;
+import com.daffodil.assignment.utilities.Utility;
 
 public class UserDetailViewModel extends BaseViewModelImp {
 
@@ -23,15 +23,15 @@ public class UserDetailViewModel extends BaseViewModelImp {
 
     public UserDetailViewModel(@NonNull Application application) {
         super(application);
-        saveDataRepo = new SaveDataRepo(new UserDataHelper(application.getApplicationContext()));
+        saveDataRepo = new SaveDataRepo(UserDataHelper.getUserDataHelper(application.getApplicationContext()));
         dataSaved = new MutableLiveData<>();
         userDetailLiveData = new MutableLiveData<>();
     }
 
-    public void saveDataInDB(AppCompatEditText nameEdt, AppCompatEditText mobileEdt, AppCompatEditText emailEdt) {
+    public void saveDataInDB(AppCompatEditText nameEdt, AppCompatEditText mobileEdt, AppCompatEditText emailEdt, String latLng, String place) {
 
         if (isAllFieldsValid(nameEdt, mobileEdt, emailEdt)) {
-            long row = saveDataRepo.insertUserData(nameEdt.getText().toString(), mobileEdt.getText().toString(), emailEdt.getText().toString());
+            long row = saveDataRepo.insertUserData(nameEdt.getText().toString(), mobileEdt.getText().toString(), emailEdt.getText().toString(), latLng, place);
 
             if (row > 0) {
 
@@ -59,13 +59,31 @@ public class UserDetailViewModel extends BaseViewModelImp {
             @Override
             public void onSuccess(UserDetail data) {
                 userDetailLiveData.setValue(data);
+                Utility.dismissLoader();
             }
 
             @Override
             public void onError(ErrorResponse errorResponse) {
-
-                Toast.makeText(getApplication().getApplicationContext(), errorResponse.getMessage(), Toast.LENGTH_SHORT).show();
+                Utility.dismissLoader();
+                Toast.makeText(getApplication().getApplicationContext(), errorResponse.getDetail(), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    public void getUserDetailWithImg(String userId){
+        saveDataRepo.getUserDetailWithImg(userId, new ViewModelCallback<UserDetail>() {
+            @Override
+            public void onSuccess(UserDetail data) {
+                userDetailLiveData.setValue(data);
+                Utility.dismissLoader();
+            }
+
+            @Override
+            public void onError(ErrorResponse errorResponse) {
+                Toast.makeText(getApplication().getApplicationContext(), errorResponse.getDetail(), Toast.LENGTH_SHORT).show();
+                Utility.dismissLoader();
+            }
+        });
+
     }
 }

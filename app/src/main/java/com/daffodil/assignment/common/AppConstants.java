@@ -15,5 +15,10 @@ public interface AppConstants {
 
     String Authorization = "Authorization";
     String BASE_URL = "http://devapi.suuchigrid.com/api/";
-    String authToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoyMjAsInVzZXJ0eXBlaWQiOjUsIm5hbWUiOiJSYWh1bCBWZXJtYSIsImVtYWlsIjoicmFodWxfdmVybWFAeW9wbWFpbC5jb20iLCJub3RpZmljYXRpb25hbGVydHByZWZlcmVuY2UiOiJFbWFpbCIsImVudGl0eUlkIjoxLCJlbnYiOiJkZXZlbG9wbWVudCIsInVzZXJncm91cHMiOlt7ImlkIjoxMCwibmFtZSI6IlN5c3RlbSBBZG1pbmlzdHJhdG9yIn0seyJpZCI6NSwibmFtZSI6IkdyaWQgQWRtaW5pc3RyYXRvciJ9XSwidXNlcnR5cGVuYW1lIjoiRW50aXR5IiwibGFuZ3VhZ2UiOiJFbmdsaXNoIn0sImlhdCI6MTYwMTA1NDc4MSwiZXhwIjoxNjAxMTQxMTgxfQ.rgkpfx3HtazB5ccFix_q_OYyyRowoa96iytZBtfyKqE";
+    String authToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoyMjAsInVzZXJ0eXBlaWQiOjUsIm5hbWUiOiJSYWh1bCBWZXJtYSIsImVtYWlsIjoicmFodWxfdmVybWFAeW9wbWFpbC5jb20iLCJub3RpZmljYXRpb25hbGVydHByZWZlcmVuY2UiOiJFbWFpbCIsImVudGl0eUlkIjoxLCJlbnYiOiJkZXZlbG9wbWVudCIsInVzZXJncm91cHMiOlt7ImlkIjoxMCwibmFtZSI6IlN5c3RlbSBBZG1pbmlzdHJhdG9yIn0seyJpZCI6NSwibmFtZSI6IkdyaWQgQWRtaW5pc3RyYXRvciJ9XSwidXNlcnR5cGVuYW1lIjoiRW50aXR5IiwibGFuZ3VhZ2UiOiJFbmdsaXNoIn0sImlhdCI6MTYwMTIxODc2OCwiZXhwIjoxNjA0MTU2MzY4fQ.xSRyPtbbMGeVzwliNJkK3QQi3FifdtpZX0avE__2QGg";
+    String LAT_LNG = "LAT_LNG";
+    String PLACE = "PLACE";
+    String USER_ID = "USER_ID";
+    String FILE_ID = "file?id=";
+
 }

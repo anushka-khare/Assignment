@@ -16,9 +16,11 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.daffodil.assignment.R;
+import com.daffodil.assignment.common.AppConstants;
 import com.daffodil.assignment.ui.input_user_details.model.UserDetail;
 import com.daffodil.assignment.ui.input_user_details.view_model.UserDetailViewModel;
 import com.daffodil.assignment.ui.upload_docs.view.UploadDocActivity;
+import com.daffodil.assignment.utilities.Utility;
 
 public class AddUserDetailActivity extends AppCompatActivity {
 
@@ -30,8 +32,9 @@ public class AddUserDetailActivity extends AppCompatActivity {
     private AppCompatTextView emailTv;
     private AppCompatButton saveBtn, clearBtn;
     private UserDetailViewModel userDetailViewModel;
-    private Long recentlySavedRow ;
     private Button next_btn;
+    private String latLng, place;
+    private String userId;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -39,6 +42,8 @@ public class AddUserDetailActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_add_user_detail);
         userDetailViewModel = ViewModelProviders.of(this).get(UserDetailViewModel.class);
+        latLng = getIntent().getStringExtra(AppConstants.LAT_LNG);
+        place = getIntent().getStringExtra(AppConstants.PLACE);
         initializeView();
         subscribeToLiveData();
     }
@@ -53,10 +58,10 @@ public class AddUserDetailActivity extends AppCompatActivity {
         userNameTv = findViewById(R.id.user_name_tv);
         mobileTv = findViewById(R.id.mobile_tv);
         emailTv = findViewById(R.id.email_tv);
-        next_btn =  findViewById(R.id.next_btn);
+        next_btn = findViewById(R.id.next_btn);
 
         saveBtn.setOnClickListener(v -> {
-            userDetailViewModel.saveDataInDB(userNameEdt, mobileEdt, emailEdt);
+            userDetailViewModel.saveDataInDB(userNameEdt, mobileEdt, emailEdt, latLng, place);
         });
 
         clearBtn.setOnClickListener(v -> {
@@ -66,8 +71,13 @@ public class AddUserDetailActivity extends AppCompatActivity {
         next_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(AddUserDetailActivity.this, UploadDocActivity.class);
-                startActivity(intent);
+                if(userId != null) {
+                    Intent intent = new Intent(AddUserDetailActivity.this, UploadDocActivity.class);
+                    intent.putExtra(AppConstants.USER_ID, userId);
+                    startActivity(intent);
+                }else {
+                    Toast.makeText(AddUserDetailActivity.this,getString(R.string.enter_user_details),Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -85,9 +95,10 @@ public class AddUserDetailActivity extends AppCompatActivity {
             @Override
             public void onChanged(Long row) {
                 if (row != null && row > 0) {
-                    recentlySavedRow = row;
+                    userId = String.valueOf(row);
                     Toast.makeText(AddUserDetailActivity.this, R.string.data_saved, Toast.LENGTH_SHORT).show();
                     clearEdt();
+                    Utility.showLoader(AddUserDetailActivity.this);
                     userDetailViewModel.fetchUserDetail(row);
                 }
             }
@@ -96,7 +107,7 @@ public class AddUserDetailActivity extends AppCompatActivity {
         userDetailViewModel.userDetailLiveData.observe(this, new Observer<UserDetail>() {
             @Override
             public void onChanged(UserDetail userDetail) {
-                if(userDetail != null){
+                if (userDetail != null) {
                     userNameTv.setText(userDetail.getName());
                     mobileTv.setText(userDetail.getMobile());
                     emailTv.setText(userDetail.getEmail());

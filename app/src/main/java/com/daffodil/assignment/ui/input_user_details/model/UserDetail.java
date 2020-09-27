@@ -6,6 +6,9 @@ public class UserDetail {
     private String name;
     private String mobile;
     private String email;
+    private String latLng;
+    private String place;
+    private String imgPath;
 
     public String getName() {
         return name;
@@ -37,5 +40,29 @@ public class UserDetail {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getLatLng() {
+        return latLng;
+    }
+
+    public void setLatLng(String latLng) {
+        this.latLng = latLng;
+    }
+
+    public String getPlace() {
+        return place;
+    }
+
+    public void setPlace(String place) {
+        this.place = place;
+    }
+
+    public String getImgPath() {
+        return imgPath;
+    }
+
+    public void setImgPath(String imgPath) {
+        this.imgPath = imgPath;
     }
 }

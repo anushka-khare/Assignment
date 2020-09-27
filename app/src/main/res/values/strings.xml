@@ -20,4 +20,9 @@
     <string name="select_a_file">Select A File</string>
     <string name="uploaded_successfully">Uploaded Successfully</string>
     <string name="upload_document">Upload Document</string>
+    <string name="choose_an_id">Choose an Id card</string>
+    <string name="choose_a_pick_up_location">Choose a pick up location</string>
+    <string name="location">Location</string>
+    <string name="place">Place</string>
+    <string name="enter_user_details">Enter User Details</string>
 </resources>

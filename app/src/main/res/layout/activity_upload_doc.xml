@@ -8,14 +8,22 @@
         android:id="@+id/choose_file_iv"
         android:src="@drawable/ic_baseline_cloud_upload_24"
         android:layout_centerHorizontal="true"
-        android:layout_margin="100dp"
+        android:layout_margin="20dp"
         android:layout_width="45dp"
         android:layout_height="45dp"/>
+
+    <TextView
+        android:id="@+id/choose_an_id_lbl"
+        android:text="@string/choose_an_id"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/choose_file_iv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
 
     <ImageView
         android:id="@+id/preview_iv"
         android:layout_centerHorizontal="true"
-        android:layout_margin="100dp"
+        android:layout_margin="20dp"
         android:visibility="gone"
         android:background="@color/colorAccent"
         android:layout_width="100dp"
@@ -30,7 +38,7 @@
         android:layout_alignParentEnd="true"
         android:layout_margin="15dp"
         android:background="@color/colorPrimary"
-        android:layout_below="@+id/choose_file_iv"
+        android:layout_below="@+id/choose_an_id_lbl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
@@ -40,8 +48,18 @@
         android:textColor="@color/white"
         android:textStyle="bold"
         android:layout_margin="15dp"
+        android:background="@color/grey"
+        android:layout_below="@+id/choose_an_id_lbl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/next_btn"
+        android:text="@string/next"
+        android:layout_margin="30dp"
         android:background="@color/colorAccent"
-        android:layout_below="@+id/choose_file_iv"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 </RelativeLayout>

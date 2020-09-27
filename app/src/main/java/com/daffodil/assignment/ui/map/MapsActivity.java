@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.daffodil.assignment.R;
+import com.daffodil.assignment.common.AppConstants;
 import com.daffodil.assignment.ui.input_user_details.view.AddUserDetailActivity;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.location.LocationServices;
@@ -58,7 +59,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private LatLng currentLatLng;
     private LocationManager locationManager;
     private Marker pickUpMarker;
-    private Button nextPageBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +73,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-        nextPageBtn = findViewById(R.id.next_btn);
+        Button nextPageBtn = findViewById(R.id.next_btn);
         nextPageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -153,9 +153,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onMyLocationClick(@NonNull Location location) {
                 // Add a marker in New Delhi and move the camera
                 currentLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+                String address = getAddress(currentLatLng.latitude, currentLatLng.longitude);
                 pickUpMarker = mMap.addMarker(new MarkerOptions().position(currentLatLng)
                         .title(getString(R.string.me))
-                        .snippet(currentLatLng.latitude + " : " + currentLatLng.longitude)
+                        .snippet(address)
                         .draggable(true));
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLatLng));
             }
@@ -188,13 +189,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                            @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         locationPermissionGranted = false;
-        switch (requestCode) {
-            case PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    locationPermissionGranted = true;
-                }
+        if (requestCode == PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION) {// If request is cancelled, the result arrays are empty.
+            if (grantResults.length > 0
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                locationPermissionGranted = true;
             }
         }
     }
@@ -204,13 +202,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onLocationChanged(Location location) {
         if (mMap != null) {
             currentLatLng = new LatLng(location.getLatitude(), location.getLongitude());
-            if(pickUpMarker != null){
-                pickUpMarker.remove();
+            String address = getAddress(currentLatLng.latitude, currentLatLng.longitude);
+            if (pickUpMarker != null) {
+                pickUpMarker.setPosition(currentLatLng);
+                pickUpMarker.setSnippet(address);
             }
-            pickUpMarker = mMap.addMarker(new MarkerOptions().position(currentLatLng)
+           /* pickUpMarker = mMap.addMarker(new MarkerOptions().position(currentLatLng)
                     .title(getString(R.string.me))
-                    .snippet(currentLatLng.latitude + " : " + currentLatLng.longitude)
-                    .draggable(true));
+                    .snippet(address)
+                    .draggable(true));*/
             mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLatLng));
         }
     }
@@ -231,39 +231,47 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
-    void nextPage(){
-        Intent intent = new Intent(this, AddUserDetailActivity.class);
-        startActivity(intent);
+    void nextPage() {
+        if (pickUpMarker != null) {
+            Intent intent = new Intent(this, AddUserDetailActivity.class);
+            intent.putExtra(AppConstants.LAT_LNG, pickUpMarker.getPosition().toString());
+            intent.putExtra(AppConstants.PLACE, pickUpMarker.getSnippet());
+            startActivity(intent);
+        } else {
+            Toast.makeText(this, getString(R.string.choose_a_pick_up_location), Toast.LENGTH_SHORT).show();
+        }
 
     }
 
     @Override
     public void onPoiClick(PointOfInterest pointOfInterest) {
-        if(mMap != null) {
+        if (mMap != null) {
             currentLatLng = pointOfInterest.latLng;
             if (pickUpMarker != null) {
-                pickUpMarker.remove();
+                pickUpMarker.setPosition(currentLatLng);
+                pickUpMarker.setSnippet(pointOfInterest.name);
             }
-            pickUpMarker = mMap.addMarker(new MarkerOptions().position(currentLatLng)
+           /* pickUpMarker = mMap.addMarker(new MarkerOptions().position(currentLatLng)
                     .title(pointOfInterest.name)
                     .snippet(getString(R.string.me))
-                    .draggable(true));
+                    .draggable(true));*/
             mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLatLng));
         }
     }
 
     @Override
     public void onMapClick(LatLng latLng) {
-        if(mMap != null) {
+        if (mMap != null) {
             currentLatLng = latLng;
+            String address = getAddress(currentLatLng.latitude, currentLatLng.longitude);
             if (pickUpMarker != null) {
-                pickUpMarker.remove();
+                pickUpMarker.setPosition(currentLatLng);
+                pickUpMarker.setSnippet(address);
             }
-            String address = getAddress(latLng.latitude, latLng.longitude);
-            pickUpMarker = mMap.addMarker(new MarkerOptions().position(currentLatLng)
+          /*  pickUpMarker = mMap.addMarker(new MarkerOptions().position(currentLatLng)
                     .title(address)
                     .snippet(getString(R.string.me))
-                    .draggable(true));
+                    .draggable(true));*/
             mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLatLng));
         }
     }
@@ -282,7 +290,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             add = add + "\n" + obj.getLocality();
             add = add + "\n" + obj.getSubThoroughfare();
 
-           return add;
+            return add;
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

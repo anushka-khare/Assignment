@@ -1,9 +1,13 @@
 package com.daffodil.assignment.base;
 
+import com.google.gson.annotations.SerializedName;
+
 public class ErrorResponse {
 
+    @SerializedName("code")
     private String code;
-    private String message;
+    @SerializedName("detail")
+    private String detail;
 
     public String getCode() {
         return code;
@@ -13,11 +17,11 @@ public class ErrorResponse {
         this.code = code;
     }
 
-    public String getMessage() {
-        return message;
+    public String getDetail() {
+        return detail;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setDetail(String detail) {
+        this.detail = detail;
     }
 }

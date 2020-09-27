@@ -42,7 +42,7 @@ public class ResponseWrapper<T> implements Callback<T> {
                 else {
                     ErrorResponse error = new ErrorResponse();
                     error.setCode("NETWORK_ERROR");
-                    error.setMessage("");
+                    error.setDetail("");
                     mResponseCallback.onFailure(error);
                 }
             } catch (IOException e) {
@@ -55,13 +55,13 @@ public class ResponseWrapper<T> implements Callback<T> {
     public void onFailure(Call<T> call, Throwable t) {
         ErrorResponse error = new ErrorResponse();
         if (t instanceof ConnectException || t instanceof UnknownHostException) {
-                error.setMessage("Connection Lost");
+                error.setDetail("Connection Lost");
         }
         else if(t instanceof IOException){
-                error.setMessage("Request cancelled");
+                error.setDetail("Request cancelled");
         }
         else {
-            error.setMessage("Looks like the server is taking too long to respond");
+            error.setDetail("Looks like the server is taking too long to respond");
         }
         mResponseCallback.onFailure(error);
     }

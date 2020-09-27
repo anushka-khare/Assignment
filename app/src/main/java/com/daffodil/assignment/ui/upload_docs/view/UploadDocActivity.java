@@ -25,7 +25,9 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.daffodil.assignment.R;
+import com.daffodil.assignment.common.AppConstants;
 import com.daffodil.assignment.ui.upload_docs.view_model.UploadDocViewModel;
+import com.daffodil.assignment.ui.view_saved_info.view.ShowInfoActivity;
 import com.daffodil.assignment.utilities.Utility;
 import com.squareup.picasso.Picasso;
 
@@ -47,12 +49,14 @@ public class UploadDocActivity extends AppCompatActivity {
     private ActivityResultLauncher<String> mGetGalleryImage;
     private ActivityResultLauncher<Intent> mGetCameraImage;
     private String chosenFileUrl = null;
+    private String userId;
 
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload_doc);
+        userId = getIntent().getStringExtra(AppConstants.USER_ID);
         initializeView();
         uploadDocViewModel = ViewModelProviders.of(this).get(UploadDocViewModel.class);
         subscribeToLiveData();
@@ -101,6 +105,7 @@ public class UploadDocActivity extends AppCompatActivity {
                 if (s != null) {
                     choose_file_iv.setVisibility(View.VISIBLE);
                     preview_iv.setVisibility(View.GONE);
+                    uploadDocViewModel.saveImagePathInDB(s, userId);
                     Toast.makeText(UploadDocActivity.this, s + getString(R.string.uploaded_successfully), Toast.LENGTH_SHORT).show();
                 }
             }
@@ -135,9 +140,19 @@ public class UploadDocActivity extends AppCompatActivity {
                 if (chosenFileUrl != null) {
                     Utility.showLoader(UploadDocActivity.this);
                     uploadDocViewModel.uploadImageForChat(chosenFileUrl);
-                }else {
-                    Toast.makeText(UploadDocActivity.this,getString(R.string.choose_a_file),Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(UploadDocActivity.this, getString(R.string.choose_a_file), Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+
+        Button next_btn = findViewById(R.id.next_btn);
+        next_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(UploadDocActivity.this, ShowInfoActivity.class);
+                intent.putExtra(AppConstants.USER_ID, userId);
+                startActivity(intent);
             }
         });
     }
