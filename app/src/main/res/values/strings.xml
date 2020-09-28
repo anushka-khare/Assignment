@@ -30,5 +30,6 @@
     <string name="phone_empty">Contact number is required</string>
     <string name="invalid_contact">Contact number should be between 7 to 15 digits</string>
     <string name="is_empty">Input is empty</string>
+    <string name="enter_add">Enter Address</string>
 
 </resources>

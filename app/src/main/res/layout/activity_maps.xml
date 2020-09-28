@@ -5,8 +5,8 @@
     android:layout_height="match_parent"
     xmlns:map="http://schemas.android.com/apk/res-auto">
 
-    <fragment
 
+    <fragment
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
@@ -20,9 +20,20 @@
         map:uiScrollGestures="true"
         map:uiTiltGestures="true"
         map:uiZoomControls="false"
-        map:uiZoomGestures="true"
-        />
+        map:uiZoomGestures="true" />
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/search_place"
+        map:queryHint="@string/enter_add"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/places_list"
+        android:visibility="gone"
+        android:layout_below="@+id/search_place"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
     <Button
         android:id="@+id/next_btn"
         android:text="@string/next"

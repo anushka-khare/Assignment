@@ -1,9 +1,12 @@
 package com.daffodil.assignment.ui.map;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.SearchView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,6 +17,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -23,6 +27,7 @@ import com.daffodil.assignment.R;
 import com.daffodil.assignment.common.AppConstants;
 import com.daffodil.assignment.ui.input_user_details.view.AddUserDetailActivity;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -34,6 +39,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PointOfInterest;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
@@ -59,19 +65,25 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private LatLng currentLatLng;
     private LocationManager locationManager;
     private Marker pickUpMarker;
+    private FusedLocationProviderClient fusedLocationClient;
+    private Geocoder geocoder;
+    private SearchView search_place;
+    private static int maxResults = 20;
+    private Handler mHandler;
+    private RecyclerView placesList;
+    private List<Address> addresses;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        if (mapFragment != null) {
-            mapFragment.getMapAsync(this);
-        }
 
+        initializeView();
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        mHandler = new Handler();
+
+        geocoder = new Geocoder(this, Locale.getDefault());
 
         Button nextPageBtn = findViewById(R.id.next_btn);
         nextPageBtn.setOnClickListener(new View.OnClickListener() {
@@ -87,15 +99,51 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
+    void initializeView() {
+
+        search_place = findViewById(R.id.search_place);
+        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        if (mapFragment != null) {
+            mapFragment.getMapAsync(this);
+        }
+
+        search_place.requestFocus();
+        search_place.setSubmitButtonEnabled(false);
+        search_place.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+
+                mHandler.removeCallbacksAndMessages(null);
+                mHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            addresses = geocoder.getFromLocationName(s, maxResults);
+
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }, 1000);
+                return false;
+            }
+        });
+        placesList = findViewById(R.id.places_list);
+        placesList.setLayoutManager(new LinearLayoutManager(this));
+
+
+
+    }
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -175,6 +223,27 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             mMap.setOnMapClickListener(this);
             mMap.setMyLocationEnabled(true);
             mMap.getUiSettings().setMyLocationButtonEnabled(true);
+            fusedLocationClient.getLastLocation()
+                    .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                        @Override
+                        public void onSuccess(Location location) {
+                            // Got last known location. In some rare situations this can be null.
+                            if (location != null) {
+                                // Logic to handle location object
+                                currentLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+                                String address = getAddress(location.getLatitude(), location.getLongitude());
+                                if (pickUpMarker == null) {
+                                    pickUpMarker = mMap.addMarker(new MarkerOptions().position(currentLatLng)
+                                            .title(getString(R.string.me))
+                                            .snippet(address)
+                                            .draggable(true));
+                                } else {
+                                    pickUpMarker.setPosition(currentLatLng);
+                                    pickUpMarker.setSnippet(address);
+                                }
+                            }
+                        }
+                    });
         } else {
             ActivityCompat.requestPermissions(this,
                     new String[]{ACCESS_FINE_LOCATION},
@@ -206,11 +275,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             if (pickUpMarker != null) {
                 pickUpMarker.setPosition(currentLatLng);
                 pickUpMarker.setSnippet(address);
-            }else {
-                 pickUpMarker = mMap.addMarker(new MarkerOptions().position(currentLatLng)
-                    .title(getString(R.string.me))
-                    .snippet(address)
-                    .draggable(true));
+            } else {
+                pickUpMarker = mMap.addMarker(new MarkerOptions().position(currentLatLng)
+                        .title(getString(R.string.me))
+                        .snippet(address)
+                        .draggable(true));
             }
 
             mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLatLng));
@@ -252,11 +321,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             if (pickUpMarker != null) {
                 pickUpMarker.setPosition(currentLatLng);
                 pickUpMarker.setSnippet(pointOfInterest.name);
-            }else {
-            pickUpMarker = mMap.addMarker(new MarkerOptions().position(currentLatLng)
-                    .title(pointOfInterest.name)
-                    .snippet(getString(R.string.me))
-                    .draggable(true));
+            } else {
+                pickUpMarker = mMap.addMarker(new MarkerOptions().position(currentLatLng)
+                        .title(pointOfInterest.name)
+                        .snippet(getString(R.string.me))
+                        .draggable(true));
             }
             mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLatLng));
         }
@@ -270,7 +339,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             if (pickUpMarker != null) {
                 pickUpMarker.setPosition(currentLatLng);
                 pickUpMarker.setSnippet(address);
-            }else {
+            } else {
                 pickUpMarker = mMap.addMarker(new MarkerOptions().position(currentLatLng)
                         .title(address)
                         .snippet(getString(R.string.me))
@@ -281,7 +350,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     public String getAddress(double lat, double lng) {
-        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
         try {
             List<Address> addresses = geocoder.getFromLocation(lat, lng, 1);
             Address obj = addresses.get(0);
@@ -296,7 +364,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             return add;
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
