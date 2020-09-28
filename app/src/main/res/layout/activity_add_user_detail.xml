@@ -80,6 +80,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="12dp"
         android:hint="@string/name"
+        android:visibility="gone"
         android:textColorLink="@color/colorAccent" />
 
     <androidx.appcompat.widget.AppCompatTextView
@@ -89,6 +90,7 @@
         android:layout_margin="12dp"
         android:hint="@string/mobile"
         android:inputType="phone"
+        android:visibility="gone"
         android:textColorLink="@color/colorAccent" />
 
     <androidx.appcompat.widget.AppCompatTextView
@@ -97,6 +99,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="12dp"
         android:hint="@string/email"
+        android:visibility="gone"
         android:inputType="textEmailAddress"
         android:textColorLink="@color/colorAccent" />
 
@@ -104,6 +107,8 @@
         android:id="@+id/next_btn"
         android:text="@string/next"
         android:textStyle="bold"
+        android:layout_margin="20dp"
+        android:layout_gravity="end|bottom"
         android:textColor="@color/white"
         android:background="@color/textBlack"
         android:layout_width="wrap_content"

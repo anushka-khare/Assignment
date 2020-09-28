@@ -109,15 +109,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         // Use the builder to create a FindCurrentPlaceRequest.
         FindCurrentPlaceRequest request =
                 FindCurrentPlaceRequest.builder(placeFields).build();*/
+        getLocationPermission();
 
         // Call findCurrentPlace and handle the response (first check that the user has granted permission).
-        if (ContextCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
 
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME, MIN_DISTANCE, this); //You can also use LocationManager.GPS_PROVIDER and LocationManager.PASSIVE_PROVIDER
-            mMap.setOnPoiClickListener(this);
-            mMap.setOnMapClickListener(this);
-            mMap.setMyLocationEnabled(true);
-            mMap.getUiSettings().setMyLocationButtonEnabled(true);
+
            /* placesClient.findCurrentPlace(request).addOnSuccessListener(((response) -> {
                 for (PlaceLikelihood placeLikelihood : response.getPlaceLikelihoods()) {
                     Log.i(TAG, String.format("Place '%s' has likelihood: %f",
@@ -135,11 +131,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     Log.e(TAG, "Place not found: " + apiException.getStatusCode());
                 }
             });*/
-        } else {
-            // A local method to request required permissions;
-            // See https://developer.android.com/training/permissions/requesting
-            getLocationPermission();
-        }
 
         // Create a LatLngBounds that includes Australia.
 //        LatLngBounds INDIA = new LatLngBounds(new LatLng(23.63936, 68.14712),
@@ -179,6 +170,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
             locationPermissionGranted = true;
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME, MIN_DISTANCE, this); //You can also use LocationManager.GPS_PROVIDER and LocationManager.PASSIVE_PROVIDER
+            mMap.setOnPoiClickListener(this);
+            mMap.setOnMapClickListener(this);
+            mMap.setMyLocationEnabled(true);
+            mMap.getUiSettings().setMyLocationButtonEnabled(true);
         } else {
             ActivityCompat.requestPermissions(this,
                     new String[]{ACCESS_FINE_LOCATION},
