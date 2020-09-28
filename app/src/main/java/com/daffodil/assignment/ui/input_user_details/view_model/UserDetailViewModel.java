@@ -8,12 +8,14 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.lifecycle.MutableLiveData;
 
+import com.daffodil.assignment.R;
 import com.daffodil.assignment.base.BaseViewModelImp;
 import com.daffodil.assignment.base.ErrorResponse;
 import com.daffodil.assignment.ui.input_user_details.model.UserDetail;
 import com.daffodil.assignment.ui.input_user_details.repo.SaveDataRepo;
 import com.daffodil.assignment.ui.input_user_details.repo.UserDataHelper;
 import com.daffodil.assignment.utilities.Utility;
+import com.daffodil.assignment.utilities.ValidationUtil;
 
 public class UserDetailViewModel extends BaseViewModelImp {
 
@@ -43,13 +45,11 @@ public class UserDetailViewModel extends BaseViewModelImp {
 
     private boolean isAllFieldsValid(AppCompatEditText nameEdt, AppCompatEditText mobileEdt, AppCompatEditText emailEdt) {
 
-        if (TextUtils.isEmpty(nameEdt.getText()))
+        if (!ValidationUtil.hasText(getApplication(), nameEdt, R.string.is_empty))
             return false;
-        if (TextUtils.isEmpty(mobileEdt.getText()))
+        if (!ValidationUtil.isValidMobile(getApplication(), mobileEdt, true))
             return false;
-        if (TextUtils.isEmpty(emailEdt.getText()))
-            return false;
-        return true;
+        return ValidationUtil.isEmailAddress(getApplication(), emailEdt, true);
     }
 
 
@@ -70,7 +70,8 @@ public class UserDetailViewModel extends BaseViewModelImp {
         });
     }
 
-    public void getUserDetailWithImg(String userId){
+    public void getUserDetailWithImg(String userId) {
+
         saveDataRepo.getUserDetailWithImg(userId, new ViewModelCallback<UserDetail>() {
             @Override
             public void onSuccess(UserDetail data) {

@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
@@ -41,9 +42,10 @@ import static com.daffodil.assignment.common.AppConstants.READ_EXTERNAL_STORAGE_
 
 public class UploadDocActivity extends AppCompatActivity {
 
-    ImageView choose_file_iv;
-    ImageView preview_iv;
-    Button upload_btn, cancel_button;
+    private ImageView choose_file_iv;
+    private ImageView preview_iv;
+    private Button upload_btn, cancel_button;
+    private TextView choose_an_id_lbl;
     private UploadDocViewModel uploadDocViewModel;
     private String mCurrentPhotoPath;
     private ActivityResultLauncher<String> mGetGalleryImage;
@@ -71,7 +73,9 @@ public class UploadDocActivity extends AppCompatActivity {
                             chosenFileUrl = Utility.getImagePath(UploadDocActivity.this, uri);
                             File file = new File(chosenFileUrl);
                             Picasso.get().load(file).into(preview_iv);
-                            choose_file_iv.setVisibility(View.GONE);
+                            choose_file_iv.setVisibility(View.INVISIBLE);
+                            choose_an_id_lbl.setVisibility(View.INVISIBLE);
+                            choose_file_iv.setEnabled(false);
                         }
 
 
@@ -89,7 +93,9 @@ public class UploadDocActivity extends AppCompatActivity {
                             File file = new File(mCurrentPhotoPath);
                             Picasso.get().load(file).into(preview_iv);
                             preview_iv.setVisibility(View.VISIBLE);
-                            choose_file_iv.setVisibility(View.GONE);
+                            choose_an_id_lbl.setVisibility(View.INVISIBLE);
+                            choose_file_iv.setVisibility(View.INVISIBLE);
+                            choose_file_iv.setEnabled(false);
                         }
                     }
                 });
@@ -104,6 +110,8 @@ public class UploadDocActivity extends AppCompatActivity {
 
                 if (s != null) {
                     choose_file_iv.setVisibility(View.VISIBLE);
+                    choose_an_id_lbl.setVisibility(View.VISIBLE);
+                    choose_file_iv.setEnabled(true);
                     preview_iv.setVisibility(View.GONE);
                     uploadDocViewModel.saveImagePathInDB(s, userId);
                     Toast.makeText(UploadDocActivity.this, s + getString(R.string.uploaded_successfully), Toast.LENGTH_SHORT).show();
@@ -117,6 +125,7 @@ public class UploadDocActivity extends AppCompatActivity {
         preview_iv = findViewById(R.id.preview_iv);
         upload_btn = findViewById(R.id.upload_btn);
         cancel_button = findViewById(R.id.cancel_button);
+        choose_an_id_lbl = findViewById(R.id.choose_an_id_lbl);
 
         choose_file_iv.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -129,6 +138,8 @@ public class UploadDocActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 choose_file_iv.setVisibility(View.VISIBLE);
+                choose_an_id_lbl.setVisibility(View.VISIBLE);
+                choose_file_iv.setEnabled(true);
                 preview_iv.setVisibility(View.GONE);
                 chosenFileUrl = null;
             }

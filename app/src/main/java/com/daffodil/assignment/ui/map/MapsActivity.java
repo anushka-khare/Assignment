@@ -148,6 +148,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 //        // Set the camera to the greatest possible zoom level that includes the bounds
 //        mMap.setLatLngBoundsForCameraTarget(INDIA);
 //        mMap.setMaxZoomPreference(14);
+
+       /* pickUpMarker = mMap.addMarker(new MarkerOptions().position(currentLatLng)
+                .title(getString(R.string.me))
+                .draggable(true));*/
         mMap.setOnMyLocationClickListener(new GoogleMap.OnMyLocationClickListener() {
             @Override
             public void onMyLocationClick(@NonNull Location location) {
@@ -206,11 +210,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             if (pickUpMarker != null) {
                 pickUpMarker.setPosition(currentLatLng);
                 pickUpMarker.setSnippet(address);
-            }
-           /* pickUpMarker = mMap.addMarker(new MarkerOptions().position(currentLatLng)
+            }else {
+                 pickUpMarker = mMap.addMarker(new MarkerOptions().position(currentLatLng)
                     .title(getString(R.string.me))
                     .snippet(address)
-                    .draggable(true));*/
+                    .draggable(true));
+            }
+
             mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLatLng));
         }
     }
@@ -250,11 +256,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             if (pickUpMarker != null) {
                 pickUpMarker.setPosition(currentLatLng);
                 pickUpMarker.setSnippet(pointOfInterest.name);
-            }
-           /* pickUpMarker = mMap.addMarker(new MarkerOptions().position(currentLatLng)
+            }else {
+            pickUpMarker = mMap.addMarker(new MarkerOptions().position(currentLatLng)
                     .title(pointOfInterest.name)
                     .snippet(getString(R.string.me))
-                    .draggable(true));*/
+                    .draggable(true));
+            }
             mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLatLng));
         }
     }
@@ -267,11 +274,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             if (pickUpMarker != null) {
                 pickUpMarker.setPosition(currentLatLng);
                 pickUpMarker.setSnippet(address);
+            }else {
+                pickUpMarker = mMap.addMarker(new MarkerOptions().position(currentLatLng)
+                        .title(address)
+                        .snippet(getString(R.string.me))
+                        .draggable(true));
             }
-          /*  pickUpMarker = mMap.addMarker(new MarkerOptions().position(currentLatLng)
-                    .title(address)
-                    .snippet(getString(R.string.me))
-                    .draggable(true));*/
             mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLatLng));
         }
     }

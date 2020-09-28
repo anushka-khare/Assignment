@@ -25,4 +25,10 @@
     <string name="location">Location</string>
     <string name="place">Place</string>
     <string name="enter_user_details">Enter User Details</string>
+    <string name="msg_email_invalid">Please enter a valid email</string>
+    <string name="msg_enter_email">Please enter email</string>
+    <string name="phone_empty">Contact number is required</string>
+    <string name="invalid_contact">Contact number should be between 7 to 15 digits</string>
+    <string name="is_empty">Input is empty</string>
+
 </resources>

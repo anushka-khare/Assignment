@@ -25,7 +25,6 @@
         android:layout_centerHorizontal="true"
         android:layout_margin="20dp"
         android:visibility="gone"
-        android:background="@color/colorAccent"
         android:layout_width="100dp"
         android:layout_height="100dp"/>
 
