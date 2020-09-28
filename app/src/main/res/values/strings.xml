@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Assignment</string>
+    <string name="app_name">UDID</string>
     <string name="title_activity_maps">Map</string>
     <string name="me">Me</string>
     <string name="name">Name</string>
@@ -31,5 +31,6 @@
     <string name="invalid_contact">Contact number should be between 7 to 15 digits</string>
     <string name="is_empty">Input is empty</string>
     <string name="enter_add">Enter Address</string>
+    <string name="gps_not_enabled">GPS is not enabled</string>
 
 </resources>

@@ -13,7 +13,7 @@
         android:layout_height="match_parent"
         tools:context=".ui.map.MapsActivity"
         map:cameraBearing="112.5"
-        map:cameraZoom="12"
+        map:cameraZoom="14"
         map:mapType="normal"
         map:uiCompass="false"
         map:uiRotateGestures="true"
@@ -21,19 +21,6 @@
         map:uiTiltGestures="true"
         map:uiZoomControls="false"
         map:uiZoomGestures="true" />
-    <androidx.appcompat.widget.SearchView
-        android:id="@+id/search_place"
-        map:queryHint="@string/enter_add"
-        android:background="@color/white"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/places_list"
-        android:visibility="gone"
-        android:layout_below="@+id/search_place"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
     <Button
         android:id="@+id/next_btn"
         android:text="@string/next"
