@@ -11,11 +11,9 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.daffodil.assignment.R;
-import com.daffodil.assignment.base.BaseViewModelImp;
 import com.daffodil.assignment.common.AppConstants;
 import com.daffodil.assignment.ui.input_user_details.model.UserDetail;
 import com.daffodil.assignment.ui.input_user_details.view_model.UserDetailViewModel;
-import com.daffodil.assignment.utilities.Utility;
 import com.squareup.picasso.Picasso;
 
 public class ShowInfoActivity extends AppCompatActivity {

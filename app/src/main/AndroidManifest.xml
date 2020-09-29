@@ -35,8 +35,7 @@
                 android:resource="@xml/file_paths" />
         </provider>
         <activity
-            android:name=".ui.map.MapsActivity"
-            android:label="@string/title_activity_maps">
+            android:name=".ui.map.MapsActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

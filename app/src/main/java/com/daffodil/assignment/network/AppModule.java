@@ -1,7 +1,5 @@
 package com.daffodil.assignment.network;
 
-import android.app.Application;
-
 import com.daffodil.assignment.common.AppConstants;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
@@ -9,9 +7,6 @@ import com.google.gson.GsonBuilder;
 
 import java.util.concurrent.TimeUnit;
 
-import javax.inject.Singleton;
-
-import dagger.Provides;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;

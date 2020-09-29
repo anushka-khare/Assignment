@@ -1,7 +1,6 @@
 package com.daffodil.assignment.ui.input_user_details.view_model;
 
 import android.app.Application;
-import android.text.TextUtils;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;

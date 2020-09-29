@@ -3,7 +3,6 @@ package com.daffodil.assignment.network;
 import androidx.annotation.NonNull;
 
 import com.daffodil.assignment.common.AppConstants;
-import com.daffodil.assignment.preferences.SessionManager;
 
 import java.io.IOException;
 

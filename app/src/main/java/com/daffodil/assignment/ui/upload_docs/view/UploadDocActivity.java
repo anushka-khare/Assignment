@@ -19,6 +19,7 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
@@ -121,6 +122,12 @@ public class UploadDocActivity extends AppCompatActivity {
     }
 
     private void initializeView() {
+
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setSubtitle(getString(R.string.id_docs));
+        }
+
         choose_file_iv = findViewById(R.id.choose_file_iv);
         preview_iv = findViewById(R.id.preview_iv);
         upload_btn = findViewById(R.id.upload_btn);

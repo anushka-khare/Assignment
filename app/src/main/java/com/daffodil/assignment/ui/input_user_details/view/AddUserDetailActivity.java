@@ -2,9 +2,6 @@ package com.daffodil.assignment.ui.input_user_details.view;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Gravity;
-import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -30,9 +27,8 @@ public class AddUserDetailActivity extends AppCompatActivity {
     private AppCompatTextView userNameTv;
     private AppCompatTextView mobileTv;
     private AppCompatTextView emailTv;
-    private AppCompatButton saveBtn, clearBtn;
+    private AppCompatButton saveBtn;
     private UserDetailViewModel userDetailViewModel;
-    private Button next_btn;
     private String latLng, place;
     private String userId;
 
@@ -54,31 +50,12 @@ public class AddUserDetailActivity extends AppCompatActivity {
         mobileEdt = findViewById(R.id.mobile_edt);
         emailEdt = findViewById(R.id.email_edt);
         saveBtn = findViewById(R.id.save_btn);
-        clearBtn = findViewById(R.id.clear_btn);
         userNameTv = findViewById(R.id.user_name_tv);
         mobileTv = findViewById(R.id.mobile_tv);
         emailTv = findViewById(R.id.email_tv);
-        next_btn = findViewById(R.id.next_btn);
 
         saveBtn.setOnClickListener(v -> {
             userDetailViewModel.saveDataInDB(userNameEdt, mobileEdt, emailEdt, latLng, place);
-        });
-
-        clearBtn.setOnClickListener(v -> {
-            clearEdt();
-        });
-
-        next_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(userId != null) {
-                    Intent intent = new Intent(AddUserDetailActivity.this, UploadDocActivity.class);
-                    intent.putExtra(AppConstants.USER_ID, userId);
-                    startActivity(intent);
-                }else {
-                    Toast.makeText(AddUserDetailActivity.this,getString(R.string.enter_user_details),Toast.LENGTH_SHORT).show();
-                }
-            }
         });
 
     }
@@ -100,6 +77,13 @@ public class AddUserDetailActivity extends AppCompatActivity {
                     clearEdt();
                     Utility.showLoader(AddUserDetailActivity.this);
                     userDetailViewModel.fetchUserDetail(row);
+                    if(userId != null) {
+                        Intent intent = new Intent(AddUserDetailActivity.this, UploadDocActivity.class);
+                        intent.putExtra(AppConstants.USER_ID, userId);
+                        startActivity(intent);
+                    }else {
+                        Toast.makeText(AddUserDetailActivity.this,getString(R.string.enter_user_details),Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });

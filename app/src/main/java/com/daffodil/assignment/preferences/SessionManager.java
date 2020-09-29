@@ -3,8 +3,6 @@ package com.daffodil.assignment.preferences;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.google.gson.Gson;
-
 /**
  * Session Manager
  */
