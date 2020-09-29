@@ -14,21 +14,25 @@ import com.daffodil.assignment.ui.input_user_details.repo.SaveDataRepo;
 import com.daffodil.assignment.ui.input_user_details.repo.UserDataHelper;
 import com.daffodil.assignment.ui.upload_docs.model.UploadImageResponse;
 import com.daffodil.assignment.ui.upload_docs.repo.UploadRepo;
+import com.daffodil.assignment.ui.upload_docs.view.UploadDocActivity;
 import com.daffodil.assignment.utilities.Utility;
 
 import java.io.File;
+import java.util.List;
 
 public class UploadDocViewModel extends BaseViewModelImp {
 
     private UploadRepo uploadRepo;
     public MutableLiveData<String> uploadedUrlLiveData;
     private SaveDataRepo saveDataRepo;
+    public MutableLiveData<Long> imagesDBdata;
 
     public UploadDocViewModel(@NonNull Application application) {
         super(application);
-        uploadRepo = new UploadRepo(((App)application).getAppModule().provideRetrofit());
+        uploadRepo = new UploadRepo(((App) application).getAppModule().provideRetrofit());
         saveDataRepo = new SaveDataRepo(UserDataHelper.getUserDataHelper(application));
         uploadedUrlLiveData = new MutableLiveData<>();
+        imagesDBdata = new MutableLiveData<>();
     }
 
 
@@ -67,10 +71,12 @@ public class UploadDocViewModel extends BaseViewModelImp {
         }
     };
 
-    public void saveImagePathInDB(String imgPath, String userId){
-        long row = saveDataRepo.insertUserImage(userId,imgPath);
-        if(row > 0){
-            Toast.makeText(getApplication(),getApplication().getString(R.string.data_saved),Toast.LENGTH_SHORT).show();
+    public void saveImagePathInDB(List<String> urls, String userId, String idType) {
+        Long row = saveDataRepo.insertUserImage(userId, urls.get(0), urls.get(1), idType);
+        if (row > 0) {
+            imagesDBdata.setValue(row);
+            Utility.dismissLoader();
+            Toast.makeText(getApplication(), getApplication().getString(R.string.data_saved), Toast.LENGTH_SHORT).show();
         }
     }
 

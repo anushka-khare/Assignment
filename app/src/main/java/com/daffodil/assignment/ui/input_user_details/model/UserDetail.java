@@ -9,6 +9,8 @@ public class UserDetail {
     private String latLng;
     private String place;
     private String imgPath;
+    private String backImgPath;
+    private String idType;
 
     public String getName() {
         return name;
@@ -64,5 +66,21 @@ public class UserDetail {
 
     public void setImgPath(String imgPath) {
         this.imgPath = imgPath;
+    }
+
+    public String getBackImgPath() {
+        return backImgPath;
+    }
+
+    public void setBackImgPath(String backImgPath) {
+        this.backImgPath = backImgPath;
+    }
+
+    public String getIdType() {
+        return idType;
+    }
+
+    public void setIdType(String idType) {
+        this.idType = idType;
     }
 }
