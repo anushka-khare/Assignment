@@ -56,7 +56,8 @@ import static com.daffodil.assignment.common.AppConstants.PERMISSIONS_REQUEST_AC
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,
         LocationListener,
         GoogleMap.OnPoiClickListener,
-        GoogleMap.OnMapClickListener {
+        GoogleMap.OnMapClickListener,
+        GoogleMap.OnCameraIdleListener {
     private LocationPickerAdapter locationPickerAdapter;
     private ILocationRepository locationRepository;
     private static final String TAG = "MapsActivity";
@@ -209,6 +210,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
 
 
+        mMap.setOnCameraIdleListener(this);
     }
 
     private void getLocationPermission() {
@@ -394,4 +396,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
+    @Override
+    public void onCameraIdle() {
+        locationPickerAdapter.setCameraMove(true);
+        LatLng data = mMap.getCameraPosition().target;
+        locationPickerAdapter.setCurrentLocation(data);
+    }
 }
