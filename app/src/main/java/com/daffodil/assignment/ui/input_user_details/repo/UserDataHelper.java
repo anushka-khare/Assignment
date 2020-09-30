@@ -15,7 +15,7 @@ public class UserDataHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "User.db";
 
     private static UserDataHelper userDataHelper = null;
-    private UserDataHelper(@Nullable Context context) {
+    public UserDataHelper(@Nullable Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 

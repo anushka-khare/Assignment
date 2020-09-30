@@ -1,10 +1,10 @@
 package com.daffodil.assignment.ui.input_user_details.view_model;
 
 import android.app.Application;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.AppCompatEditText;
 import androidx.lifecycle.MutableLiveData;
 
 import com.daffodil.assignment.R;
@@ -29,7 +29,7 @@ public class UserDetailViewModel extends BaseViewModelImp {
         userDetailLiveData = new MutableLiveData<>();
     }
 
-    public void saveDataInDB(AppCompatEditText nameEdt, AppCompatEditText mobileEdt, AppCompatEditText emailEdt, String latLng, String place) {
+    public void saveDataInDB(EditText nameEdt, EditText mobileEdt, EditText emailEdt, String latLng, String place) {
 
         if (isAllFieldsValid(nameEdt, mobileEdt, emailEdt)) {
             long row = saveDataRepo.insertUserData(nameEdt.getText().toString(), mobileEdt.getText().toString(), emailEdt.getText().toString(), latLng, place);
@@ -42,7 +42,7 @@ public class UserDetailViewModel extends BaseViewModelImp {
 
     }
 
-    private boolean isAllFieldsValid(AppCompatEditText nameEdt, AppCompatEditText mobileEdt, AppCompatEditText emailEdt) {
+    private boolean isAllFieldsValid(EditText nameEdt, EditText mobileEdt, EditText emailEdt) {
 
         if (!ValidationUtil.hasText(getApplication(), nameEdt, R.string.is_empty))
             return false;

@@ -45,11 +45,11 @@
         android:id="@+id/next_btn"
         android:text="@string/next"
         android:layout_margin="12dp"
-        android:background="@color/colorAccent"
-        android:textColor="@color/white"
+        android:background="@drawable/bg_btn"
+        android:textColor="@color/black_80"
         android:textStyle="bold"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="50dp" />
 </RelativeLayout>
