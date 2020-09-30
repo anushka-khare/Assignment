@@ -6,6 +6,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -20,7 +21,7 @@ public class ShowInfoActivity extends AppCompatActivity {
 
     UserDetailViewModel userDetailViewModel;
     private TextView user_info_tv;
-    private ImageView doc_img;
+    private ImageView doc_img,back_img;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -41,10 +42,11 @@ public class ShowInfoActivity extends AppCompatActivity {
                     StringBuilder userInfo = new StringBuilder("");
 
                     userInfo.append("<b>").append(getString(R.string.name)).append("</b> ").append(userDetail.getName())
-                            .append("<br>").append("<b>").append(getString(R.string.mobile)).append("</b> ").append(userDetail.getMobile())
-                            .append("<br>").append("<b>").append(getString(R.string.email)).append("</b> ").append(userDetail.getEmail())
-                            .append("<br>").append("<b>").append(getString(R.string.location)).append("</b> ").append(userDetail.getLatLng())
-                            .append("<br>").append("<b>").append(getString(R.string.place)).append("</b> ").append(userDetail.getPlace());
+                            .append("<br>").append("<br>").append("<b>").append(getString(R.string.mobile)).append("</b> ").append(userDetail.getMobile())
+                            .append("<br>").append("<br>").append("<b>").append(getString(R.string.email)).append("</b> ").append(userDetail.getEmail())
+                            .append("<br>").append("<br>").append("<b>").append(getString(R.string.id_type)).append("</b> ").append(userDetail.getIdType())
+                            .append("<br>").append("<br>").append("<b>").append(getString(R.string.location)).append("</b> ").append(userDetail.getLatLng())
+                            .append("<br>").append("<br>").append("<b>").append(getString(R.string.place)).append("</b> ").append(userDetail.getPlace());
 
                     user_info_tv.setText(Html.fromHtml(userInfo.toString()));
 
@@ -53,13 +55,24 @@ public class ShowInfoActivity extends AppCompatActivity {
                             .placeholder(R.drawable.ic_launcher_background)
                             .error(R.drawable.ic_launcher_background)
                             .into(doc_img);
+
+                    Picasso.get().load(AppConstants.BASE_URL + AppConstants.FILE_ID
+                            + userDetail.getBackImgPath() + "&Authorization=" + AppConstants.authToken)
+                            .placeholder(R.drawable.ic_launcher_background)
+                            .error(R.drawable.ic_launcher_background)
+                            .into(back_img);
                 }
             }
         });
     }
 
     private void initializeView() {
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setTitle(R.string.ur_udi_info);
+        }
         doc_img = findViewById(R.id.doc_img);
+        back_img = findViewById(R.id.back_img);
         user_info_tv = findViewById(R.id.user_info_tv);
     }
 

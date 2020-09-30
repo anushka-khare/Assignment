@@ -7,6 +7,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -40,7 +41,10 @@ public class AddUserDetailActivity extends AppCompatActivity {
     }
 
     private void initializeView() {
-
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setTitle(getString(R.string.user_details));
+        }
         userNameEdt = findViewById(R.id.user_name_edt);
         mobileEdt = findViewById(R.id.mobile_edt);
         emailEdt = findViewById(R.id.email_edt);

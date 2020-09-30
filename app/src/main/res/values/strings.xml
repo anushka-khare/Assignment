@@ -2,9 +2,9 @@
     <string name="app_name">My UDID</string>
     <string name="title_activity_maps">Map</string>
     <string name="me">Me</string>
-    <string name="name">Name</string>
-    <string name="mobile">Mobile</string>
-    <string name="email">Email</string>
+    <string name="name">Name:</string>
+    <string name="mobile">Mobile:</string>
+    <string name="email">Email:</string>
     <string name="save">Save</string>
     <string name="clear">Clear</string>
     <string name="data_saved">Data Saved Successfully</string>
@@ -15,16 +15,17 @@
     <string name="wait">Please wait...</string>
     <string name="upload">Upload</string>
     <string name="cancel">Cancel</string>
-    <string name="choose_a_file">Choose A file</string>
+    <string name="choose_a_file">Choose both side image of your Id card</string>
     <string name="take_photo">Take Photo</string>
     <string name="select_a_file">Select A File</string>
     <string name="uploaded_successfully">Uploaded Successfully</string>
     <string name="upload_document">Upload Document</string>
     <string name="choose_an_id">Choose an Id card</string>
     <string name="choose_a_pick_up_location">Choose a pick up location</string>
-    <string name="location">Location</string>
-    <string name="place">Place</string>
+    <string name="location">Location:</string>
+    <string name="place">Place:</string>
     <string name="enter_user_details">Enter User Details</string>
+    <string name="user_details">UDID Information</string>
     <string name="msg_email_invalid">Please enter a valid email</string>
     <string name="msg_enter_email">Please enter email</string>
     <string name="phone_empty">Contact number is required</string>
@@ -33,6 +34,12 @@
     <string name="enter_add">Enter Address</string>
     <string name="gps_not_enabled">GPS is not enabled</string>
     <string name="id_docs">Identity documents</string>
+    <string name="id_type">UDID Type:</string>
     <string name="dl">Driving Licence</string>
+    <string name="aadhar_card">Aadhar Card</string>
+    <string name="voter_id">Voter Id</string>
+    <string name="front_view">Front View</string>
+    <string name="back_view">Back View</string>
+    <string name="ur_udi_info">Your UDID Information</string>
 
 </resources>

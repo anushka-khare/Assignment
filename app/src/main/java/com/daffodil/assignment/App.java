@@ -14,7 +14,6 @@ public class App extends Application {
         super.onCreate();
 
         MapsInitializer.initialize(this);
-
         if(appModule == null){
             appModule = new AppModule();
         }

@@ -26,6 +26,8 @@ public class SaveDataRepo {
     public static class UserImage implements BaseColumns {
         public static final String TABLE_IMAGE = "user_img";
         public static final String COLUMN_IMAGE_PATH = "imgPath";
+        public static final String COLUMN_BACK_IMAGE_PATH = "backImgPath";
+        public static final String COLUMN_ID_TYPE = "idType";
         public static final String COLUMN_USER_ID = "userId";
         public static final String IMG_ID = "IMG_ID";
     }
@@ -42,7 +44,9 @@ public class SaveDataRepo {
     public static final String SQL_CREATE_IMAGE_TABLE =
             "CREATE TABLE " + UserImage.TABLE_IMAGE + " (" +
                     UserImage.IMG_ID + " INTEGER PRIMARY KEY," +
+                    UserImage.COLUMN_ID_TYPE + " TEXT ," +
                     UserImage.COLUMN_IMAGE_PATH + " TEXT ," +
+                    UserImage.COLUMN_BACK_IMAGE_PATH + " TEXT ," +
                     UserImage.COLUMN_USER_ID + " INTEGER," +
                     " FOREIGN KEY (" + UserImage.COLUMN_USER_ID + ") REFERENCES " + UserEntry.TABLE_NAME + "(" + UserEntry._ID + "));";
 
@@ -53,7 +57,7 @@ public class SaveDataRepo {
     private static SQLiteDatabase database;
 
     public SaveDataRepo(UserDataHelper userDataHelper) {
-        if(database == null) {
+        if (database == null) {
             database = userDataHelper.getWritableDatabase();
         }
     }
@@ -99,22 +103,22 @@ public class SaveDataRepo {
 
     }
 
-    public long insertUserImage(String userId, String imagePath){
+    public long insertUserImage(String userId, String imagePath, String backImgPath, String idType) {
         ContentValues values = new ContentValues();
         values.put(UserImage.COLUMN_USER_ID, userId);
         values.put(UserImage.COLUMN_IMAGE_PATH, imagePath);
-
-        return database.insert(UserImage.TABLE_IMAGE,null,values);
+        values.put(UserImage.COLUMN_BACK_IMAGE_PATH, backImgPath);
+        values.put(UserImage.COLUMN_ID_TYPE, idType);
+        return database.insert(UserImage.TABLE_IMAGE, null, values);
     }
 
-    public void getUserDetailWithImg(String userId, BaseViewModelImp.ViewModelCallback<UserDetail> callback){
+    public void getUserDetailWithImg(String userId, BaseViewModelImp.ViewModelCallback<UserDetail> callback) {
         UserDetail userDetail = new UserDetail();
-        String rawQuery = "SELECT * FROM " + UserEntry.TABLE_NAME + " inner join "+UserImage.TABLE_IMAGE + " ON "+ UserEntry._ID + " = "+ UserImage.COLUMN_USER_ID +
+        String rawQuery = "SELECT * FROM " + UserEntry.TABLE_NAME + " inner join " + UserImage.TABLE_IMAGE + " ON " + UserEntry._ID + " = " + UserImage.COLUMN_USER_ID +
                 " WHERE " + UserImage.COLUMN_USER_ID + " =?";
 
-        Cursor cursor = database.rawQuery(rawQuery, new String[] {userId});
+        Cursor cursor = database.rawQuery(rawQuery, new String[]{userId});
         if (cursor != null) {
-
             try {
                 cursor.moveToFirst();
                 userDetail.setId(cursor.getInt(cursor.getColumnIndex(UserEntry._ID)));
@@ -124,6 +128,9 @@ public class SaveDataRepo {
                 userDetail.setLatLng(cursor.getString(cursor.getColumnIndex(UserEntry.COLUMN_LAT_LNG)));
                 userDetail.setPlace(cursor.getString(cursor.getColumnIndex(UserEntry.COLUMN_PLACE)));
                 userDetail.setImgPath(cursor.getString(cursor.getColumnIndex(UserImage.COLUMN_IMAGE_PATH)));
+                userDetail.setBackImgPath(cursor.getString(cursor.getColumnIndex(UserImage.COLUMN_BACK_IMAGE_PATH)));
+                userDetail.setIdType(cursor.getString(cursor.getColumnIndex(UserImage.COLUMN_ID_TYPE)));
+
                 callback.onSuccess(userDetail);
 
             } catch (SQLException e) {
@@ -136,7 +143,6 @@ public class SaveDataRepo {
             }
         }
     }
-
 
 
 }
