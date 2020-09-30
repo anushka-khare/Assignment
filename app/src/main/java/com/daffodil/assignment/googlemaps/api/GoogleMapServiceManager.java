@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.daffodil.assignment.googlemaps.api.model.GoogleApiRequest;
 import com.daffodil.assignment.googlemaps.api.model.GoogleApiResponse;
+import com.daffodil.assignment.network.AppModule;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -17,7 +18,7 @@ public class GoogleMapServiceManager implements IGoogleApiRequestManager{
 
     @Override
     public void getAutoCompletePlaces(GoogleApiRequest googleApiRequest, IMapServiceListener listener) {
-        mRouteCall = GoogleMapApiService.getApiService().getAutoCompletePlaces(
+        mRouteCall = AppModule.getGoogleApiService().getAutoCompletePlaces(
                 googleApiRequest.getInput(),
                 "5000",
                 googleApiRequest.getLocation(),
@@ -42,7 +43,7 @@ public class GoogleMapServiceManager implements IGoogleApiRequestManager{
 
     @Override
     public void getPlacesDetails(GoogleApiRequest googleApiRequest, IMapServiceListener listener) {
-        mRouteCall = GoogleMapApiService.getApiService().getPlacesDetails(
+        mRouteCall = AppModule.getGoogleApiService().getPlacesDetails(
                 googleApiRequest.getPlaceId(),
                 googleApiRequest.getFields(),
                 googleApiRequest.getKey());

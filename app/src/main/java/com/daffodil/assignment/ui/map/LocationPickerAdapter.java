@@ -133,8 +133,9 @@ public class LocationPickerAdapter extends ArrayAdapter<PlaceModel> {
                         @Override
                         public void onSuccess(GoogleApiResponse routes) {
                             filterSearchList.clear();
-                            filterSearchList.addAll(routes.getPlaceModelList());
-
+                            if(routes.getPlaceModelList() != null && routes.getPlaceModelList().size() > 0) {
+                                filterSearchList.addAll(routes.getPlaceModelList());
+                            }
                             FilterResults results = new FilterResults();
                             results.values = filtered;
                             results.count = filtered.size();

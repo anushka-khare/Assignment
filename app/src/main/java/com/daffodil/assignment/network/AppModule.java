@@ -1,6 +1,7 @@
 package com.daffodil.assignment.network;
 
 import com.daffodil.assignment.common.AppConstants;
+import com.daffodil.assignment.googlemaps.api.GoogleApiService;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -14,6 +15,34 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class AppModule {
     private static ApiService apiService;
+    private static GoogleApiService sGoogleApiService;
+
+    /**
+     * Get api retrofit object
+     * @return Instance of api service
+     */
+    public static  GoogleApiService getGoogleApiService() {
+        if (sGoogleApiService == null) {
+            final String baseUrl = "https://maps.googleapis.com/";
+            OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                    .connectTimeout(90, TimeUnit.SECONDS)
+                    .readTimeout(90, TimeUnit.SECONDS)
+                    .retryOnConnectionFailure(true)
+                    .addNetworkInterceptor(new ApiInterceptor())
+                    .addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
+                    .build();
+            GsonBuilder gsonBuilder = new GsonBuilder();
+            gsonBuilder.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES);
+            sGoogleApiService = new Retrofit.Builder()
+                    .client(okHttpClient)
+                    .baseUrl(baseUrl)
+                    .addConverterFactory(GsonConverterFactory.create(gsonBuilder.create()))
+                    .build()
+                    .create(GoogleApiService.class);
+        }
+
+        return sGoogleApiService;
+    }
 
     public ApiService provideRetrofit() {
         if (apiService == null) {
