@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Filter;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -135,7 +136,10 @@ public class LocationPickerAdapter extends ArrayAdapter<PlaceModel> {
                             filterSearchList.clear();
                             if(routes.getPlaceModelList() != null && routes.getPlaceModelList().size() > 0) {
                                 filterSearchList.addAll(routes.getPlaceModelList());
+                            } else {
+                                filtered.addAll(getErrorView());
                             }
+                            Toast.makeText(context, routes.getStatus(), Toast.LENGTH_LONG).show();
                             FilterResults results = new FilterResults();
                             results.values = filtered;
                             results.count = filtered.size();
@@ -143,7 +147,7 @@ public class LocationPickerAdapter extends ArrayAdapter<PlaceModel> {
                         }
 
                         @Override
-                        public void onFailure(int no_route_found) {
+                        public void onFailure(String msg) {
                             if (filtered.isEmpty()) {
                                 filtered.addAll(getErrorView());
                             }
