@@ -139,7 +139,7 @@ public class LocationPickerAdapter extends ArrayAdapter<PlaceModel> {
                             } else {
                                 filtered.addAll(getErrorView());
                             }
-                            Toast.makeText(context, routes.getStatus(), Toast.LENGTH_LONG).show();
+                            Toast.makeText(context, routes.getStatus(), Toast.LENGTH_SHORT).show();
                             FilterResults results = new FilterResults();
                             results.values = filtered;
                             results.count = filtered.size();

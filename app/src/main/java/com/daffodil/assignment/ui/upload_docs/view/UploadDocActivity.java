@@ -14,7 +14,6 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
@@ -57,9 +56,9 @@ public class UploadDocActivity extends AppCompatActivity {
     //    private TextView choose_an_id_lbl;
     private UploadDocViewModel uploadDocViewModel;
     private String mCurrentPhotoPath;
-    private ActivityResultLauncher<String> mGetGalleryImage;
+    private ActivityResultLauncher<Intent> mGetGalleryImage;
     private ActivityResultLauncher<Intent> mGetCameraImage;
-    private ActivityResultLauncher<String> mGetBackImage;
+    private ActivityResultLauncher<Intent> mGetBackImage;
     private ActivityResultLauncher<Intent> mGetBackCameraImage;
     private String chosenFileUrl = null;
     private String chosenBackFileUrl = null;
@@ -79,20 +78,26 @@ public class UploadDocActivity extends AppCompatActivity {
         uploadDocViewModel = ViewModelProviders.of(this).get(UploadDocViewModel.class);
         subscribeToLiveData();
 
-        mGetGalleryImage = registerForActivityResult(new ActivityResultContracts.GetContent(),
-                new ActivityResultCallback<Uri>() {
+        mGetGalleryImage = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
                     @Override
-                    public void onActivityResult(Uri uri) {
+                    public void onActivityResult(ActivityResult result) {
+                        Intent intent = result.getData();
+                        Uri uri = null;
+                        if (intent != null) {
+                            uri = intent.getData();
+                        }
                         // Handle the returned Uri
                         if (uri != null && uri.getPath() != null) {
                             front_preview_layout.setVisibility(View.VISIBLE);
                             remove_front_preview.setEnabled(true);
                             chosenFileUrl = Utility.getImagePath(UploadDocActivity.this, uri);
-                            File file = new File(chosenFileUrl);
-                            Picasso.get().load(file).into(preview_front_img);
-                            choose_front_img.setVisibility(View.INVISIBLE);
-//                            choose_an_id_lbl.setVisibility(View.INVISIBLE);
-                            choose_front_img.setEnabled(false);
+                            if (chosenFileUrl != null) {
+                                File file = new File(chosenFileUrl);
+                                Picasso.get().load(file).into(preview_front_img);
+                                choose_front_img.setVisibility(View.INVISIBLE);
+                                choose_front_img.setEnabled(false);
+                            }
                         }
 
 
@@ -104,7 +109,6 @@ public class UploadDocActivity extends AppCompatActivity {
                     @Override
                     public void onActivityResult(ActivityResult result) {
                         if (result.getResultCode() == Activity.RESULT_OK) {
-                            Intent intent = result.getData();
                             // Handle the Intent
                             chosenFileUrl = mCurrentPhotoPath;
                             File file = new File(mCurrentPhotoPath);
@@ -118,19 +122,26 @@ public class UploadDocActivity extends AppCompatActivity {
                     }
                 });
 
-        mGetBackImage = registerForActivityResult(new ActivityResultContracts.GetContent(),
-                new ActivityResultCallback<Uri>() {
+        mGetBackImage = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
                     @Override
-                    public void onActivityResult(Uri uri) {
+                    public void onActivityResult(ActivityResult result) {
+                        Intent intent = result.getData();
+                        Uri uri = null;
+                        if (intent != null) {
+                            uri = intent.getData();
+                        }
                         // Handle the returned Uri
                         if (uri != null && uri.getPath() != null) {
                             back_preview_layout.setVisibility(View.VISIBLE);
                             remove_back_preview.setEnabled(true);
                             chosenBackFileUrl = Utility.getImagePath(UploadDocActivity.this, uri);
-                            File file = new File(chosenBackFileUrl);
-                            Picasso.get().load(file).into(preview_back_img);
-                            choose_back_img.setVisibility(View.INVISIBLE);
-                            choose_back_img.setEnabled(false);
+                            if (chosenBackFileUrl != null) {
+                                File file = new File(chosenBackFileUrl);
+                                Picasso.get().load(file).into(preview_back_img);
+                                choose_back_img.setVisibility(View.INVISIBLE);
+                                choose_back_img.setEnabled(false);
+                            }
                         }
 
 
@@ -172,7 +183,6 @@ public class UploadDocActivity extends AppCompatActivity {
 
                         // find the radiobutton by returned id
                         RadioButton radioButton = (RadioButton) findViewById(selectedId);
-                        Utility.showLoader(UploadDocActivity.this);
                         uploadDocViewModel.saveImagePathInDB(uploadedUrls, userId, radioButton.getText().toString());
 
                     }
@@ -184,7 +194,8 @@ public class UploadDocActivity extends AppCompatActivity {
             @Override
             public void onChanged(Long aLong) {
 
-                if(aLong != null){
+                if (aLong != null) {
+                    Utility.dismissLoader();
                     Intent intent = new Intent(UploadDocActivity.this, ShowInfoActivity.class);
                     intent.putExtra(AppConstants.USER_ID, userId);
                     startActivity(intent);
@@ -260,16 +271,6 @@ public class UploadDocActivity extends AppCompatActivity {
                 }
             }
         });
-
-      /*  Button next_btn = findViewById(R.id.next_btn);
-        next_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(UploadDocActivity.this, ShowInfoActivity.class);
-                intent.putExtra(AppConstants.USER_ID, userId);
-                startActivity(intent);
-            }
-        });*/
     }
 
     private void openDialogToSelectFile(int side) {
@@ -308,20 +309,17 @@ public class UploadDocActivity extends AppCompatActivity {
     }
 
     private void openGalleyIntent(int side) {
-       /* Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_DEFAULT);
         intent.setType("image/*");
-        *//*String[] mimeTypes = {"image/*"};
-        intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);*//*
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
         intent = Intent.createChooser(intent, getString(R.string.choose_a_file));
-        startActivityForResult(intent, READ_REQUEST_CODE);*/
 
         if (side == FRONT)
-            mGetGalleryImage.launch("image/*");
+            mGetGalleryImage.launch(intent);
         else
-            mGetBackImage.launch("image/*");
+            mGetBackImage.launch(intent);
     }
 
     private void openCameraIntent(int side) {
@@ -365,5 +363,9 @@ public class UploadDocActivity extends AppCompatActivity {
         return image;
     }
 
-
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Utility.dismissLoader();
+    }
 }

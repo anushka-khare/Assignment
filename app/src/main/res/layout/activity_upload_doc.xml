@@ -12,9 +12,7 @@
         android:id="@+id/doc_type_rg"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_50sdp"
-        android:layout_marginTop="@dimen/_12sdp"
-        android:layout_marginStart="@dimen/_12sdp"
-        android:layout_marginEnd="@dimen/_12sdp"
+        android:layout_margin="@dimen/_8sdp"
         android:paddingEnd="@dimen/_8sdp"
         android:gravity="center"
         android:background="@drawable/bg_white_stroke"
@@ -33,7 +31,7 @@
             android:id="@+id/aadhar_rb"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/_2sdp"
+            android:layout_margin="@dimen/_1sdp"
             android:textColor="@color/white"
             android:text="@string/aadhar_card" />
 

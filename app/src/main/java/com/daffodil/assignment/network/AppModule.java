@@ -49,8 +49,8 @@ public class AppModule {
 
     private OkHttpClient provideHttpClient(ApiInterceptor interceptor) {
         return new OkHttpClient.Builder()
-                .connectTimeout(90, TimeUnit.SECONDS)
-                .readTimeout(90, TimeUnit.SECONDS)
+                .connectTimeout(120, TimeUnit.SECONDS)
+                .readTimeout(120, TimeUnit.SECONDS)
                 .retryOnConnectionFailure(true)
                 .addNetworkInterceptor(interceptor)
                 .addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))

@@ -125,23 +125,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         edtSearch.setFilterOnFocus(true);
         edtSearch.setOnEditorActionListener((v, actionId, event) -> false);
         edtSearch.setOnItemClickListener(onItemClickListener);
-
-        edtSearch.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
         edtSearch.setDropDownWidth(DeviceUtils.getDeviceScreenWidth(this) - 5);
         edtSearch.setDropDownAnchor(edtSearch.getId());
 
@@ -202,10 +185,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 String address = getAddress(currentLatLng.latitude, currentLatLng.longitude);
                 updatePickUpMarker(address, currentLatLng);
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLatLng));
+            }
+        });
 
+        mMap.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
+            @Override
+            public boolean onMyLocationButtonClick() {
                 if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                     Toast.makeText(MapsActivity.this, R.string.gps_not_enabled, Toast.LENGTH_SHORT).show();
                 }
+                return false;
             }
         });
 

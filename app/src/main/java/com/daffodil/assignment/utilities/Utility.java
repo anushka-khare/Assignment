@@ -57,13 +57,13 @@ public class Utility {
     }
 
     public static void showLoader(Context context) {
-         progressDialog = ProgressDialog.show(context, context.getString(R.string.loading), context.getString(R.string.wait));
-         progressDialog.setCancelable(false);
+        progressDialog = ProgressDialog.show(context, context.getString(R.string.loading), context.getString(R.string.wait));
+        progressDialog.setCancelable(false);
     }
 
-    public static void dismissLoader(){
+    public static void dismissLoader() {
 
-        if(progressDialog != null){
+        if (progressDialog != null) {
             progressDialog.dismiss();
         }
     }
@@ -83,7 +83,7 @@ public class Utility {
 
     }
 
-    public static String getImagePath(Context context, Uri uri){
+    public static String getImagePath(Context context, Uri uri) {
         final String docId = DocumentsContract.getDocumentId(uri);
         final String[] split = docId.split(":");
         final String type = split[0];
@@ -98,7 +98,11 @@ public class Utility {
         }
 
         final String selection = "_id=?";
-        final String[] selectionArgs = new String[]{split[1]};
+        String[] selectionArgs = null;
+
+        if (split.length > 1) {
+            selectionArgs = new String[]{split[1]};
+        }
 
         return getDataColumn(context, contentUri, selection,
                 selectionArgs);

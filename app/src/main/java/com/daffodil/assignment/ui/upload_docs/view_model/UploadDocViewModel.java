@@ -59,7 +59,6 @@ public class UploadDocViewModel extends BaseViewModelImp {
 
             if (data != null && data.getDocuments() != null) {
                 uploadedUrlLiveData.setValue(data.getDocuments());
-                Utility.dismissLoader();
             }
         }
 
