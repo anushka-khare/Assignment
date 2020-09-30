@@ -12,15 +12,13 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
         MapsInitializer.initialize(this);
+    }
+
+    public static AppModule getAppModule(){
         if(appModule == null){
             appModule = new AppModule();
         }
-
-    }
-
-    public AppModule getAppModule(){
         return appModule;
     }
 }

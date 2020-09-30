@@ -29,7 +29,7 @@ public class UploadDocViewModel extends BaseViewModelImp {
 
     public UploadDocViewModel(@NonNull Application application) {
         super(application);
-        uploadRepo = new UploadRepo(((App) application).getAppModule().provideRetrofit());
+        uploadRepo = new UploadRepo(App.getAppModule().provideRetrofit());
         saveDataRepo = new SaveDataRepo(UserDataHelper.getUserDataHelper(application));
         uploadedUrlLiveData = new MutableLiveData<>();
         imagesDBdata = new MutableLiveData<>();

@@ -168,7 +168,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
 
                 @Override
-                public void onFailure(int no_route_found) {
+                public void onFailure(String msg) {
 
                 }
             });

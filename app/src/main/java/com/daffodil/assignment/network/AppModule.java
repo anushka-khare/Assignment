@@ -21,22 +21,13 @@ public class AppModule {
      * Get api retrofit object
      * @return Instance of api service
      */
-    public static  GoogleApiService getGoogleApiService() {
+    public  GoogleApiService getGoogleApiService() {
         if (sGoogleApiService == null) {
             final String baseUrl = "https://maps.googleapis.com/";
-            OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                    .connectTimeout(90, TimeUnit.SECONDS)
-                    .readTimeout(90, TimeUnit.SECONDS)
-                    .retryOnConnectionFailure(true)
-                    .addNetworkInterceptor(new ApiInterceptor())
-                    .addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
-                    .build();
-            GsonBuilder gsonBuilder = new GsonBuilder();
-            gsonBuilder.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES);
             sGoogleApiService = new Retrofit.Builder()
-                    .client(okHttpClient)
+                    .client(provideHttpClient(provideInterceptor()))
                     .baseUrl(baseUrl)
-                    .addConverterFactory(GsonConverterFactory.create(gsonBuilder.create()))
+                    .addConverterFactory(GsonConverterFactory.create(provideGson()))
                     .build()
                     .create(GoogleApiService.class);
         }
