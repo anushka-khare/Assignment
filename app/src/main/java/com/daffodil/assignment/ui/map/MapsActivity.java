@@ -10,7 +10,10 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -22,7 +25,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.daffodil.assignment.R;
 import com.daffodil.assignment.common.AppConstants;
+import com.daffodil.assignment.googlemaps.api.GoogleMapServiceManager;
+import com.daffodil.assignment.googlemaps.api.model.GoogleApiResponse;
+import com.daffodil.assignment.googlemaps.api.model.PlaceModel;
+import com.daffodil.assignment.googlemaps.repo.location.ILocationRepository;
+import com.daffodil.assignment.googlemaps.repo.location.LocationRepositiory;
 import com.daffodil.assignment.ui.input_user_details.view.AddUserDetailActivity;
+import com.daffodil.assignment.utilities.CustomAutoCompleteTextView;
+import com.daffodil.assignment.utilities.DeviceUtils;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -47,7 +57,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         LocationListener,
         GoogleMap.OnPoiClickListener,
         GoogleMap.OnMapClickListener {
-
+    private LocationPickerAdapter locationPickerAdapter;
+    private ILocationRepository locationRepository;
     private static final String TAG = "MapsActivity";
     private static final long MIN_TIME = 400;
     private static final float MIN_DISTANCE = 50;
@@ -63,12 +74,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private RecyclerView placesList;
     private List<Address> addresses;
     private FusedLocationProviderClient fusedLocationProviderClient;
-
+    private CustomAutoCompleteTextView edtSearch;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
+        locationRepository = new LocationRepositiory(this);
 
         currentLatLng = new LatLng(28.4595, 77.0266);
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -104,8 +116,64 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 nextPage();
             }
         });
+        locationPickerAdapter = new LocationPickerAdapter(getApplicationContext());
+
+        edtSearch = findViewById(R.id.search_box);
+        edtSearch.setAdapter(locationPickerAdapter);
+        edtSearch.setAlwaysFilter(true);
+        edtSearch.setFilterOnFocus(true);
+        edtSearch.setOnEditorActionListener((v, actionId, event) -> false);
+        edtSearch.setOnItemClickListener(onItemClickListener);
+
+        edtSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        edtSearch.setDropDownWidth(DeviceUtils.getDeviceScreenWidth(this) - 5);
+        edtSearch.setDropDownAnchor(edtSearch.getId());
+
 
     }
+    private AdapterView.OnItemClickListener onItemClickListener = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            PlaceModel model = locationPickerAdapter.getItem(position);
+            assert model != null;
+
+            locationRepository.getPlaceDetails(getBaseContext(), model.getPlace_id(), new GoogleMapServiceManager.IMapServiceListener() {
+                @Override
+                public void onSuccess(GoogleApiResponse routes) {
+                    PlaceModel placeModel = routes.getPlaceModel();
+                    if (placeModel != null && placeModel.getGeometry() != null) {
+                        model.setGeometry(placeModel.getGeometry());
+                        LatLng place = new LatLng(
+                                placeModel.getGeometry().getGoogleLocation().getLat(),
+                                placeModel.getGeometry().getGoogleLocation().getLng()
+                        );
+                        mMap.moveCamera(CameraUpdateFactory.newLatLng(place));
+                    }
+                }
+
+                @Override
+                public void onFailure(int no_route_found) {
+
+                }
+            });
+        }
+    };
+
 
     @Override
     public void onMapReady(GoogleMap googleMap) {

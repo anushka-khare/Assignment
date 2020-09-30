@@ -21,6 +21,26 @@
         map:uiTiltGestures="true"
         map:uiZoomControls="false"
         map:uiZoomGestures="true" />
+
+    <com.daffodil.assignment.utilities.CustomAutoCompleteTextView
+        android:id="@+id/search_box"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:layout_gravity="center_vertical"
+        android:background="#ffffff"
+        android:layout_marginTop="10dp"
+        android:dropDownVerticalOffset="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="80dp"
+        android:hint="@string/search_location"
+        android:inputType="text"
+        android:imeOptions="actionDone"
+        android:maxLines="1"
+        android:visibility="visible"
+        android:dropDownWidth="match_parent"
+        tools:ignore="NestedWeights" />
+
     <Button
         android:id="@+id/next_btn"
         android:text="@string/next"

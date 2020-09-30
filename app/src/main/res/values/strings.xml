@@ -41,5 +41,7 @@
     <string name="front_view">Front View</string>
     <string name="back_view">Back View</string>
     <string name="ur_udi_info">Your UDID Information</string>
+    <string name="search_location">Search Location</string>
+    <string name="error_location_not_found">Location Not Found</string>
 
 </resources>
