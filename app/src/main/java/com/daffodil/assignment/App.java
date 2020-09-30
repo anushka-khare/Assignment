@@ -3,6 +3,7 @@ package com.daffodil.assignment;
 import android.app.Application;
 
 import com.daffodil.assignment.network.AppModule;
+import com.google.android.gms.maps.MapsInitializer;
 
 public class App extends Application {
 
@@ -11,6 +12,8 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        MapsInitializer.initialize(this);
 
         if(appModule == null){
             appModule = new AppModule();
