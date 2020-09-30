@@ -11,7 +11,7 @@
     <RadioGroup
         android:id="@+id/doc_type_rg"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="@dimen/_50sdp"
         android:layout_marginTop="@dimen/_12sdp"
         android:layout_marginStart="@dimen/_12sdp"
         android:layout_marginEnd="@dimen/_12sdp"
@@ -26,6 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/_2sdp"
             android:checked="true"
+            android:textColor="@color/white"
             android:text="@string/dl" />
 
         <RadioButton
@@ -33,6 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/_2sdp"
+            android:textColor="@color/white"
             android:text="@string/aadhar_card" />
 
         <RadioButton
@@ -40,21 +42,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/_2sdp"
+            android:textColor="@color/white"
             android:text="@string/voter_id" />
     </RadioGroup>
 
     <TextView
         android:id="@+id/front_view_lbl"
         android:layout_width="wrap_content"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/doc_type_rg"
         android:layout_margin="@dimen/_12sdp"
-        android:background="@drawable/bg_white_stroke"
         android:gravity="center"
-        android:paddingStart="8dp"
-        android:paddingEnd="8dp"
+        android:paddingStart="@dimen/_8sdp"
+        android:paddingEnd="@dimen/_8sdp"
+        android:textColor="@color/white"
         android:text="@string/front_view"
-        android:textColor="@color/textBlack"
         android:textStyle="bold" />
 
     <ImageView
@@ -102,15 +104,14 @@
     <TextView
         android:id="@+id/back_view_lbl"
         android:layout_width="wrap_content"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:gravity="center"
-        android:paddingStart="8dp"
-        android:paddingEnd="8dp"
-        android:background="@drawable/bg_white_stroke"
+        android:paddingStart="@dimen/_8sdp"
+        android:paddingEnd="@dimen/_8sdp"
         android:layout_below="@+id/separator"
         android:layout_margin="@dimen/_12sdp"
         android:text="@string/back_view"
-        android:textColor="@color/textBlack"
+        android:textColor="@color/white"
         android:textStyle="bold" />
 
     <ImageView
@@ -149,7 +150,7 @@
     <Button
         android:id="@+id/upload_btn"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="@dimen/_50sdp"
         android:layout_below="@+id/back_preview_layout"
         android:layout_centerHorizontal="true"
         android:layout_margin="@dimen/_12sdp"
